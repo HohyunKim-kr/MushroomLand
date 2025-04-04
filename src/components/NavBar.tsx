@@ -59,6 +59,9 @@ const NavBar = () => {
           <Link to="/dressroom" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
             Dressroom
           </Link>
+          <Link to="/game" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
+            Game
+          </Link>
         </div>
         
         <div className="flex gap-4 items-center">

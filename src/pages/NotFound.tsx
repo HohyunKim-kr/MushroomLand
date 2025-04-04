@@ -15,7 +15,7 @@ const NotFound = () => {
 
   return (
     <motion.div 
-      className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1A0B2E] to-[#2A1A3E] bg-starry-pattern bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}

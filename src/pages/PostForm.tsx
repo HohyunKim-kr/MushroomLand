@@ -63,7 +63,7 @@ const PostForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1A0B2E] to-[#2A1A3E] bg-starry-pattern bg-cover bg-center">
+    <div className="min-h-screen bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90">
       <NavBar />
       
       <motion.div 

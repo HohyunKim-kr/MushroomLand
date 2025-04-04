@@ -36,7 +36,7 @@ const PostDetail = () => {
           title: `Post #${postId} Title`,
           content: `This is the content of post #${postId}. It's a detailed view of this post with all its content displayed here. This is a sample post to demonstrate the post detail page functionality.`,
           author: 'MapleUser123',
-          date: '2023-07-15',
+          date: '2025-04-04',
           imageUrl: Math.random() > 0.5 ? 'https://placehold.co/800x400/2A1A3E/A3F0E0?text=Post+Image' : undefined
         });
         
@@ -45,13 +45,13 @@ const PostDetail = () => {
             id: '1',
             content: 'Great post! Thanks for sharing this information.',
             author: 'Commenter1',
-            date: '2023-07-16'
+            date: '2025-04-04'
           },
           {
             id: '2',
             content: 'I have a question about this. Can you provide more details?',
             author: 'Commenter2',
-            date: '2023-07-17'
+            date: '2025-04-04'
           }
         ]);
         
@@ -117,7 +117,7 @@ const PostDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#1A0B2E] to-[#2A1A3E] bg-starry-pattern bg-cover bg-center">
+      <div className="min-h-screen bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90">
         <NavBar />
         <div className="container mx-auto pt-24 px-4">
           <div className="bg-[#1A0B2E]/90 p-6 max-w-4xl mx-auto border-2 border-[#FF66B3] shadow-[0_0_5px_rgba(255,102,179,0.2)] rounded-lg">
@@ -137,7 +137,7 @@ const PostDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1A0B2E] to-[#2A1A3E] bg-starry-pattern bg-cover bg-center">
+    <div className="min-h-screen bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90">
       <NavBar />
       
       <motion.div 

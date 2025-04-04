@@ -48,28 +48,28 @@ const DressroomDashboard = () => {
       id: 'hat2',
       name: 'Royal Hat',
       slot: 'hat',
-      imageUrl: 'https://placehold.co/100/2A1A3E/A3F0E0?text=Hat2',
+      imageUrl: './public/maplehat.png',
       stats: { str: 3, int: 5, defense: 12 }
     },
     {
       id: 'top1',
       name: 'Maple Shirt',
       slot: 'top',
-      imageUrl: 'https://placehold.co/100/2A1A3E/A3F0E0?text=Top1',
+      imageUrl: './public/shirts.png',
       stats: { defense: 15, hp: 20 }
     },
     {
       id: 'weapon1',
       name: 'Maple Staff',
       slot: 'weapon',
-      imageUrl: 'https://placehold.co/100/2A1A3E/A3F0E0?text=Staff',
+      imageUrl: './public/메이플 스태프.png',
       stats: { int: 10, attack: 25 }
     },
     {
       id: 'weapon2',
       name: 'Maple Sword',
       slot: 'weapon',
-      imageUrl: 'https://placehold.co/100/2A1A3E/A3F0E0?text=Sword',
+      imageUrl: './public/메이플 소드.',
       stats: { str: 10, attack: 30 }
     }
   ]);
@@ -122,7 +122,7 @@ const DressroomDashboard = () => {
   const totalStats = calculateTotalStats();
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1A0B2E] to-[#2A1A3E] bg-starry-pattern bg-cover bg-center">
+    <div className="min-h-screen bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90">
       <NavBar />
       
       <motion.div 

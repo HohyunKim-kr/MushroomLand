@@ -94,6 +94,7 @@
 
   body {
     @apply bg-background text-foreground overflow-x-hidden;
+    cursor: url('/purplesurfingboard.png') 0 0, auto !important;
   }
 }
 

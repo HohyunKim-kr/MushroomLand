@@ -140,24 +140,21 @@ export default {
       },
       backgroundImage: {
         'forest-pattern': "url('/public/lovable-uploads/734faf37-4b2a-4294-b127-e6b88156676f.png')",
-        // New starry pattern for the cosmic background
-        'starry-pattern': "url('/public/lovable-uploads/starry-pattern.png')", // Adjust the path as needed
+        'starry-pattern': "url('/public/lovable-uploads/starry-pattern.png')",
+        'mp-background': "url('/mpbackground.png')", // ✅ 여기에 추가됨
       },
-      // Add boxShadow for glowing effects
       boxShadow: {
-        'glow': '0 0 15px rgba(147, 51, 234, 0.5)', // Purple glow for the MapleStory Universe aesthetic
+        'glow': '0 0 15px rgba(147, 51, 234, 0.5)',
       },
-      // Add textShadow for glowing text (requires a plugin or custom CSS)
       textShadow: {
-        'glow-yellow': '0 0 5px rgba(255, 215, 0, 0.5)', // Glow for yellow text
-        'glow-green': '0 0 5px rgba(0, 255, 153, 0.5)',  // Glow for green text
-        'glow-purple': '0 0 5px rgba(147, 51, 234, 0.5)', // Glow for purple text
+        'glow-yellow': '0 0 5px rgba(255, 215, 0, 0.5)',
+        'glow-green': '0 0 5px rgba(0, 255, 153, 0.5)',
+        'glow-purple': '0 0 5px rgba(147, 51, 234, 0.5)',
       },
     }
   },
   plugins: [
     require("tailwindcss-animate"),
-    // Add a plugin for text-shadow if not already included
     function ({ addUtilities }: { addUtilities: any }) {
       const newUtilities = {
         '.text-shadow-glow-yellow': {
