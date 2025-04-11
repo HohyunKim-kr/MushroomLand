@@ -1,96 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import PixelButton from './PixelButton';
-import { motion } from 'framer-motion';
-import useAuth from '@/hooks/useAuth';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
 
-const NavBar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const { user, logout } = useAuth();
+const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { user, setUser, setJwtToken } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      // 백엔드로 로그아웃 요청 보내기 (fetch 사용)
+      const response = await fetch('http://localhost:5000/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // 상태 초기화 (JWT 토큰과 사용자 정보 초기화)
+        setJwtToken('');
+        setUser(null);
+
+        // localStorage에서 JWT 토큰 삭제
+        localStorage.removeItem('jwtToken');
+
+        // 로그아웃 후 로그인 페이지로 리디렉션
+        navigate('/login');
+      } else {
+        throw new Error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (
-    <motion.header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1A0B2E]/90 backdrop-blur-sm py-4 shadow-[0_4px_10px_rgba(255,102,179,0.2)] border-b-2 border-[#FF66B3]/50`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-    >
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="relative">
-            <motion.div 
-              className="text-[#A3F0E0] font-bold text-2xl"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
-            >
-              Community MushroomLand
-            </motion.div>
-            <motion.div 
-              className="absolute -bottom-1 left-0 h-0.5 bg-[#FF66B3] rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            />
-          </div>
-        </Link>
-        
-        <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
-            Home
-          </Link>
-          <Link to="/bulletin" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
-            Bulletin Board
-          </Link>
-          <Link to="/dressroom" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
-            Dressroom
-          </Link>
-          <Link to="/game" className="text-white/90 hover:text-[#A3F0E0] transition-colors text-lg">
-            Game
-          </Link>
+    <div className="bg-[#1A0B2E]/90 p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="text-white text-2xl font-bold">
+          <span>Community MushroomLand</span>
         </div>
-        
-        <div className="flex gap-4 items-center">
+        <div className="text-white">
           {user ? (
-            <>
-              <span className="hidden md:inline text-[#FF66B3] font-bold text-lg">
-                Welcome, {user.username}
-              </span>
-              <PixelButton variant="login" size="md" onClick={handleLogout}>
-                Logout
-              </PixelButton>
-            </>
+            <div className="flex items-center gap-4">
+              <span>{user.email}</span>
+              <button
+                onClick={handleLogout}
+                className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
+              >
+                로그아웃
+              </button>
+            </div>
           ) : (
-            <>
-              <Link to="/login">
-                <PixelButton variant="login" size="md">
-                  Login
-                </PixelButton>
-              </Link>
-              <Link to="/register">
-                <PixelButton variant="primary" size="md">
-                  Sign Up
-                </PixelButton>
-              </Link>
-            </>
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
+            >
+              로그인
+            </button>
           )}
         </div>
       </div>
-    </motion.header>
+    </div>
   );
 };
 

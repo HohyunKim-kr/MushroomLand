@@ -1,12 +1,12 @@
-// src/pages/MainPage.tsx
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import PixelButton from '@/components/PixelButton';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { toast } from 'sonner';
 import Intro from '@/components/Intro';
+import { useAuthStore } from '../store/useAuthStore';
 
 interface Post {
   id: string;
@@ -18,9 +18,36 @@ interface Post {
 }
 
 const MainPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { jwtToken, setJwtToken, setUser } = useAuthStore();
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('jwt');
+    
+    if (token) {
+      setJwtToken(token); // Store JWT in Zustand store
+      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT
+      console.log(decodedToken);
+      
+      const userInfo = {
+        userId: decodedToken.userId,
+        email: decodedToken.email,
+        name: decodedToken.name || 'No Name',
+        picture: decodedToken.picture || '',
+      };
+      console.log(userInfo);
+      
+      setUser(userInfo); // Set user info in Zustand store
+    } else {
+      console.error('JWT token is missing');
+    }
+  }, []);  // 의존성 배열을 빈 배열로 설정하여 이 효과가 한 번만 실행되도록 함
+  
+
 
   useEffect(() => {
     const fetchRecentPosts = async () => {
@@ -63,10 +90,22 @@ const MainPage: React.FC = () => {
     if (!showIntro) {
       fetchRecentPosts();
     }
-  }, [showIntro]);
+  }, [showIntro]); // 'showIntro'만 의존성으로 설정, 이 값이 변경될 때만 실행
 
   const handleIntroComplete = () => {
     setShowIntro(false); // 인트로 완료 시 상태 전환
+  };
+
+  const handleLogout = () => {
+    // 전역 상태 초기화
+    setJwtToken('');
+    setUser(null);
+    
+    // 로컬스토리지에서 JWT 삭제
+    localStorage.removeItem('jwtToken');
+    
+    // 로그인 페이지로 리디렉션
+    navigate('/login');
   };
 
   return (
@@ -80,13 +119,15 @@ const MainPage: React.FC = () => {
       {!showIntro && (
         <>
           <NavBar />
-          
+
+
           <motion.div 
             className="container mx-auto pt-24 px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
+            {/* Welcome Section */}
             <motion.div 
               className="p-6 mb-8 bg-[#2A1A3E]/90 border-2 border-[#FF66B3] shadow-[0_0_5px_rgba(255,102,179,0.3)] rounded-lg"
               initial={{ y: -20, opacity: 0 }}
@@ -103,6 +144,7 @@ const MainPage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
             >
+              {/* Card Components (Bulletin, Dressroom, Account) */}
               <Link to="/bulletin" className="hover-scale">
                 <Card className="bg-[#1A0B2E]/90 border-[#FF66B3] shadow-[0_0_5px_rgba(255,102,179,0.2)] hover:shadow-[0_0_8px_rgba(255,102,179,0.4)] transition-all">
                   <CardHeader>
@@ -111,16 +153,11 @@ const MainPage: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="h-40 flex items-center justify-center bg-[#2A1A3E]/60 rounded-md">
-                      {/* 이미지 추가 */}
                       <img
                         src="/bv.png" // 원하는 이미지 URL로 교체
                         alt="Bulletin Board"
                         className="w-full h-full object-cover rounded-md"
                       />
-                      {/* SVG를 유지하고 싶다면 이미지와 함께 배치 가능 */}
-                      {/* <svg className="w-16 h-16 text-[#66E6CC]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11z"/>
-                      </svg> */}
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-center">
@@ -148,7 +185,6 @@ const MainPage: React.FC = () => {
                         alt="Dressroom"
                         className="w-full h-full object-cover rounded-md"
                       />
-                      {/* <svg>...</svg> */}
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-center">
@@ -176,7 +212,6 @@ const MainPage: React.FC = () => {
                         alt="Account"
                         className="w-full h-full object-cover rounded-md"
                       />
-                      {/* <svg>...</svg> */}
                     </div>
                   </CardContent>
                   <CardFooter className="flex justify-center">
@@ -190,7 +225,6 @@ const MainPage: React.FC = () => {
                   </CardFooter>
                 </Card>
               </Link>
-
             </motion.div>
 
             <motion.div

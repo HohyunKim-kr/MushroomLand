@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -35,24 +34,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  // Mock login function (would connect to real API in production)
+  // Actual login API call (replace with real API in production)
   const login = async (username: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock auth check (would be actual API validation in production)
-      if (username && password.length >= 4) {
-        const newUser = {
-          id: Math.random().toString(36).substring(2, 9),
-          username,
-          token: `mock-token-${Date.now()}`
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.token) {
+        const newUser: User = {
+          id: data.id,
+          username: data.username,
+          token: data.token,
         };
-        
+
         setUser(newUser);
         localStorage.setItem('user', JSON.stringify(newUser));
+
         toast.success('Login successful!');
         return true;
       } else {

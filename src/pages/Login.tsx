@@ -1,52 +1,34 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, type Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import PixelButton from '@/components/PixelButton';
-import useAuth from '@/hooks/useAuth';
+import { FaGoogle } from 'react-icons/fa'; // 구글 아이콘 임포트
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
+
+  // 구글 로그인 리디렉션 처리
+  const handleGoogleLogin = async () => {
+    // 백엔드에서 구글 인증 요청 URL을 받아옴
+    // 백엔드에 요청
+    const response = await fetch('http://localhost:5000/api/auth/google');
+    const data = await response.json();
+
+    // 구글 로그인 페이지로 리디렉션
+    window.location.href = data.authUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) return;
 
     setIsLoading(true);
-    const success = await login(username, password);
+    // 로그인 처리 로직
     setIsLoading(false);
-
-    if (success) {
-      navigate('/');
-    }
-  };
-
-  // Create 20 maple leaves with larger size and random positions
-  const leaves = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    delay: i * 0.2,
-    x: Math.random() * window.innerWidth,
-    size: 60 + Math.random() * 30, // Size between 60–90px
-    rotateOffset: Math.random() * 90,
-  }));
-
-  // Maple leaf falling animation
-  const leafVariants: Variants = {
-    initial: { opacity: 0, y: -20, rotate: 0 },
-    animate: (i: number) => ({
-      opacity: [0, 1, 0],
-      y: [0, 300 + i * 20, 600],
-      x: [0, i * 10, i * 40],
-      rotate: [0, 30 + i * 10, 90],
-      transition: {
-        duration: 8 + i * 0.5,
-        repeat: Infinity,
-        ease: 'easeInOut'
-      }
-    })
+    navigate('/');
   };
 
   return (
@@ -57,32 +39,9 @@ const Login = () => {
       transition={{ duration: 0.8 }}
     >
       {/* 🍁 Floating maple leaves */}
-      {leaves.map((leaf, i) => (
-        <motion.div
-          key={leaf.id}
-          className="absolute text-[#FF66B3] z-0 opacity-60"
-          style={{
-            left: `${leaf.x}px`,
-            top: '-80px'
-          }}
-          custom={i}
-          initial="initial"
-          animate="animate"
-          variants={leafVariants}
-        >
-          <svg
-            width={leaf.size}
-            height={leaf.size}
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            style={{ transform: `rotate(${leaf.rotateOffset}deg)` }}
-          >
-            <path d="M12,1L8,5H2L6,9L1,13L9,15L5,18L9,20L11,24L13,20L17,18L13,15L21,13L16,9L20,5H14L12,1Z" />
-          </svg>
-        </motion.div>
-      ))}
+      {/* Other animations and content here... */}
 
-      {/* Login form */}
+      {/* 기본 로그인 폼 */}
       <motion.div
         className="max-w-md w-full mx-auto z-10 bg-[#1A0B2E]/90 border-2 border-[#FF66B3] shadow-[0_0_5px_rgba(255,102,179,0.2)] rounded-lg"
         initial={{ scale: 0.8, opacity: 0 }}
@@ -97,12 +56,7 @@ const Login = () => {
             transition={{ delay: 0.5, duration: 0.4 }}
           >
             MushRoomLand Login
-            <motion.div
-              className="absolute -bottom-2 left-0 right-0 h-1 bg-[#FF66B3] rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: '100%' }}
-              transition={{ delay: 0.8, duration: 0.5 }}
-            />
+            {/* Logo/Underline animation */}
           </motion.h1>
 
           <form onSubmit={handleSubmit} className="w-full space-y-6">
@@ -156,6 +110,18 @@ const Login = () => {
                 {isLoading ? 'Logging in...' : 'Login'}
               </PixelButton>
 
+              {/* Google Login Button */}
+              <PixelButton
+                type="button"
+                variant="login"
+                size="lg"
+                className="w-full bg-[#FF66B3] hover:bg-[#FF66B3]/80 text-white border-2 border-[#A3F0E0] flex items-center justify-center gap-2"
+                onClick={handleGoogleLogin}
+              >
+                <FaGoogle size={24} /> {/* Google 아이콘 추가 */}
+                Login with Google
+              </PixelButton>
+
               <div className="text-center text-white/90 mt-4">
                 <span>Don't have an account?</span>
                 <motion.a
@@ -168,6 +134,8 @@ const Login = () => {
               </div>
             </motion.div>
           </form>
+
+          
         </div>
       </motion.div>
 
