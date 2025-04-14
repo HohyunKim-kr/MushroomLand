@@ -16,6 +16,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import { AnimatePresence } from "framer-motion";
 import GamePage from "./pages/GamePage"
 import JumpGame from "./pages/JumpGame"
+import MushroomSurvivorGame from './pages/MushroomSurvivorGame';
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/game" element={<GamePage />} />
               <Route path="/game/JumpGame" element={<JumpGame />} />
+              <Route path="/mushroomsurvivor" element={<MushroomSurvivorGame />} />
               <Route path="/dressroom" element={<DressroomDashboard />} />
               <Route path="/bulletin" element={<BulletinBoard />} />
               <Route path="/bulletin/:postId" element={<PostDetail />} />

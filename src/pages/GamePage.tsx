@@ -1,3 +1,4 @@
+// src/pages/GamePage.tsx
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ const GamePage: React.FC = () => {
             description: '메이플 인내의 숲 스타일 무한 점프 게임!',
             good: 150,
             bad: 20,
-            url: './JumpGame', // 점프 게임 경로
+            url: './JumpGame',
           },
           {
             id: '2',
@@ -68,6 +69,16 @@ const GamePage: React.FC = () => {
             good: 200,
             bad: 50,
             url: '/games/space',
+          },
+          {
+            id: '5',
+            title: 'Mushroom Survivor',
+            category: '슈팅',
+            thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=MushroomSurvivor',
+            description: '버섯 캐릭터와 함께하는 생존 슈팅 게임!',
+            good: 180,
+            bad: 25,
+            url: '/mushroomsurvivor', // MushroomSurvivorGame.tsx 경로
           },
         ];
         setGames(mockGames);
