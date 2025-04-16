@@ -1,6 +1,7 @@
 import WeaponManager from '../components/WeaponManager.js';
 import PlayerStats from '../components/PlayerStats.js';
 import SkillManager from '../components/SkillManager.js';
+import OrangeMushroom from '../components/monsters/orangeMushroom.js'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -28,16 +29,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('bullet', '/games/MUSHROOMSURVIVOR/assets/bullet.png');
         this.load.image('coin', '/games/MUSHROOMSURVIVOR/assets/coin.png');
         this.load.image('background', '/games/MUSHROOMSURVIVOR/assets/bgss.png');
-
-        this.load.on('start', () => {
-            console.log('Starting to load assets...');
-        });
-        this.load.on('filecomplete-image-background', () => {
-            console.log('Background image loaded successfully');
-        });
-        this.load.on('loaderror', (file) => {
-            console.error(`Failed to load image: ${file.key}, src: ${file.src}`);
-        });
     }
 
     create() {
@@ -51,26 +42,21 @@ export default class GameScene extends Phaser.Scene {
         this.playerStats = new PlayerStats(this);
         this.skillManager = new SkillManager(this);
 
-        // 월드 크기를 뷰포트보다 크게 설정
         const worldWidth = this.scale.width * 2;
         const worldHeight = this.scale.height * 2;
         this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
-        // 배경 추가
         this.addBackground(worldWidth, worldHeight);
 
-        // 플레이어 생성
         this.player = this.physics.add.sprite(worldWidth / 2, worldHeight / 2, 'player');
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(1);
         this.player.setData('health', this.playerStats.getStat('health'));
         this.player.setData('invincible', false);
 
-        // 카메라 설정
-        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+        this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
         this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 
-        // 입력 설정
         this.cursors = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -79,148 +65,107 @@ export default class GameScene extends Phaser.Scene {
             space: Phaser.Input.Keyboard.KeyCodes.SPACE,
         });
 
-        // 그룹 생성
         this.enemies = this.physics.add.group();
         this.bullets = this.physics.add.group();
         this.coins = this.physics.add.group();
 
-        // 충돌 설정
         this.physics.add.overlap(this.player, this.enemies, this.playerHit, null, this);
         this.physics.add.overlap(this.bullets, this.enemies, this.bulletHitEnemy, null, this);
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
-        // 타이머 설정
-        this.time.addEvent({
-            delay: 1000,
-            callback: this.spawnEnemy,
-            callbackScope: this,
-            loop: true,
-        });
-
-        this.time.addEvent({
-            delay: 500,
-            callback: this.autoAttack,
-            callbackScope: this,
-            loop: true,
-        });
-
+        this.time.addEvent({ delay: 1000, callback: this.spawnEnemy, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 500, callback: this.autoAttack, callbackScope: this, loop: true });
         this.time.addEvent({
             delay: 1000,
             callback: () => {
                 this.gameTime++;
-                console.log(`Game time: ${this.gameTime}s, Coins: ${this.coinsCollected}`);
-                if (this.gameTime >= 180) {
-                    this.gameOver(true);
-                }
+                if (this.gameTime >= 180) this.gameOver(true);
             },
             callbackScope: this,
             loop: true,
         });
 
-        // UI 생성
         this.createUI();
-
-        // 크기 조정 이벤트 리스너 추가
         this.scale.on('resize', this.handleResize, this);
     }
 
     createUI() {
-        const uiMargin = 10;
-        this.expText = this.add.text(uiMargin, uiMargin, 'EXP: 0', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
-        this.levelText = this.add.text(uiMargin, uiMargin + 30, 'Level: 1', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
-        this.coinsText = this.add.text(uiMargin, uiMargin + 60, 'Coins: 0', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
-        this.healthText = this.add.text(uiMargin, uiMargin + 90, `Health: ${this.player.getData('health')}`, {
-            fontSize: '20px',
-            color: '#fff',
-        }).setScrollFactor(0);
-        this.damageText = this.add.text(uiMargin, uiMargin + 120, `Damage: ${this.playerStats.getStat('damage').toFixed(1)}`, {
-            fontSize: '20px',
-            color: '#fff',
-        }).setScrollFactor(0);
-        this.speedText = this.add.text(uiMargin, uiMargin + 150, `Speed: ${this.playerStats.getStat('speed')}`, {
-            fontSize: '20px',
-            color: '#fff',
-        }).setScrollFactor(0);
-        this.weaponText = this.add.text(uiMargin, uiMargin + 180, `Weapon: ${this.weaponManager.getCurrentWeapon()}`, {
-            fontSize: '20px',
-            color: '#fff',
-        }).setScrollFactor(0);
-        this.cooldownText = this.add.text(uiMargin, uiMargin + 210, 'Triple Shot: Ready', {
-            fontSize: '20px',
-            color: '#fff',
-        }).setScrollFactor(0);
+        const m = 10;
+        this.expText = this.add.text(m, m, 'EXP: 0', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.levelText = this.add.text(m, m + 30, 'Level: 1', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.coinsText = this.add.text(m, m + 60, 'Coins: 0', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.healthText = this.add.text(m, m + 90, `Health: ${this.player.getData('health')}`, { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.damageText = this.add.text(m, m + 120, `Damage: ${this.playerStats.getStat('damage').toFixed(1)}`, { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.speedText = this.add.text(m, m + 150, `Speed: ${this.playerStats.getStat('speed')}`, { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.weaponText = this.add.text(m, m + 180, `Weapon: ${this.weaponManager.getCurrentWeapon()}`, { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
+        this.cooldownText = this.add.text(m, m + 210, 'Triple Shot: Ready', { fontSize: '20px', color: '#fff' }).setScrollFactor(0);
     }
 
     addBackground(worldWidth, worldHeight) {
         if (this.textures.exists('background')) {
-            this.background = this.add.image(0, 0, 'background')
-                .setOrigin(0)
-                .setDepth(0);
+            this.background = this.add.image(0, 0, 'background').setOrigin(0).setDepth(0);
             this.adjustBackgroundSize();
         } else {
-            console.warn('Background image not found, using fallback color');
-            this.background = this.add.rectangle(0, 0, worldWidth, worldHeight, 0x444444)
-                .setOrigin(0)
-                .setDepth(0);
+            this.background = this.add.rectangle(0, 0, worldWidth, worldHeight, 0x444444).setOrigin(0).setDepth(0);
         }
     }
 
     adjustBackgroundSize() {
         if (this.background instanceof Phaser.GameObjects.Image) {
-            const viewportWidth = this.scale.width;
-            const viewportHeight = this.scale.height;
-            const scaleX = viewportWidth / this.background.width;
-            const scaleY = viewportHeight / this.background.height;
-            const scale = Math.max(scaleX, scaleY); // 뷰포트에 맞게 확장
+            const worldWidth = this.physics.world.bounds.width;
+            const worldHeight = this.physics.world.bounds.height;
+            const scaleX = worldWidth / this.background.width;
+            const scaleY = worldHeight / this.background.height;
+            const scale = Math.max(scaleX, scaleY);
             this.background.setScale(scale);
-            this.background.setPosition(this.cameras.main.scrollX, this.cameras.main.scrollY);
         }
     }
 
     handleResize(gameSize) {
-        const { width, height } = gameSize;
+        const width = gameSize.width;
+        const height = gameSize.height;
         const worldWidth = width * 2;
         const worldHeight = height * 2;
 
-        // 월드 크기 업데이트
         this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
         this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 
-        // 배경 크기 조정
         this.adjustBackgroundSize();
 
-        // UI 위치 재조정
-        const uiMargin = 10;
-        this.expText.setPosition(uiMargin, uiMargin);
-        this.levelText.setPosition(uiMargin, uiMargin + 30);
-        this.coinsText.setPosition(uiMargin, uiMargin + 60);
-        this.healthText.setPosition(uiMargin, uiMargin + 90);
-        this.damageText.setPosition(uiMargin, uiMargin + 120);
-        this.speedText.setPosition(uiMargin, uiMargin + 150);
-        this.weaponText.setPosition(uiMargin, uiMargin + 180);
-        this.cooldownText.setPosition(uiMargin, uiMargin + 210);
+        const m = 10;
+        this.expText.setPosition(m, m);
+        this.levelText.setPosition(m, m + 30);
+        this.coinsText.setPosition(m, m + 60);
+        this.healthText.setPosition(m, m + 90);
+        this.damageText.setPosition(m, m + 120);
+        this.speedText.setPosition(m, m + 150);
+        this.weaponText.setPosition(m, m + 180);
+        this.cooldownText.setPosition(m, m + 210);
     }
 
     update() {
         let speed = this.playerStats.getStat('speed');
-        let velocityX = 0;
-        let velocityY = 0;
+        let vx = 0, vy = 0;
 
-        if (this.cursors.left.isDown) velocityX -= speed;
-        if (this.cursors.right.isDown) velocityX += speed;
-        if (this.cursors.up.isDown) velocityY -= speed;
-        if (this.cursors.down.isDown) velocityY += speed;
+        if (this.cursors.left.isDown) vx -= speed;
+        if (this.cursors.right.isDown) vx += speed;
+        if (this.cursors.up.isDown) vy -= speed;
+        if (this.cursors.down.isDown) vy += speed;
 
-        if (velocityX !== 0 && velocityY !== 0) {
-            velocityX *= 0.707;
-            velocityY *= 0.707;
+        if (vx !== 0 && vy !== 0) {
+            vx *= 0.707;
+            vy *= 0.707;
         }
 
-        this.player.setVelocity(velocityX, velocityY);
+        this.player.setVelocity(vx, vy);
 
         const pointer = this.input.activePointer;
         const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.worldX, pointer.worldY);
         this.player.setRotation(angle);
+
+        if (this.background instanceof Phaser.GameObjects.Image) {
+            this.background.setPosition(this.cameras.main.scrollX, this.cameras.main.scrollY);
+        }
 
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space) && !this.tripleShotCooldown) {
             this.weaponManager.tripleShot(this.player, pointer, this.bullets);
@@ -230,19 +175,25 @@ export default class GameScene extends Phaser.Scene {
             this.time.delayedCall(5000, () => {
                 this.tripleShotCooldown = false;
                 this.cooldownText.setText('Triple Shot: Ready');
-                console.log('Triple Shot ready!');
             });
         }
     }
 
     spawnEnemy() {
-        const worldWidth = this.physics.world.bounds.width;
-        const worldHeight = this.physics.world.bounds.height;
-        const x = Phaser.Math.Between(0, worldWidth);
-        const y = Phaser.Math.Between(0, worldHeight);
-        const enemy = this.enemies.create(x, y, 'enemy');
-        enemy.setData('health', 3);
-        this.physics.moveToObject(enemy, this.player, 100);
+        const x = Phaser.Math.Between(0, this.physics.world.bounds.width);
+        const y = Phaser.Math.Between(0, this.physics.world.bounds.height);
+    
+        let enemy;
+        if (this.level < 5) {
+            enemy = new OrangeMushroom(this, x, y);
+        } else if (this.level < 10) {
+            enemy = new Goblin(this, x, y);
+        } else {
+            enemy = new BossMonster(this, x, y);
+        }
+    
+        this.enemies.add(enemy);
+        enemy.moveTowards(this.player);
     }
 
     autoAttack() {
@@ -297,6 +248,8 @@ export default class GameScene extends Phaser.Scene {
         this.updateUI();
 
         if (this.coinsCollected % 5 === 0) {
+            //this.scene.sleep(); // GameScene 멈춤
+            this.scene.resume('GameScene'); 
             this.skillManager.showUpgradeMenu();
         }
 

@@ -1,4 +1,3 @@
-// src/scenes/UpgradeModalScene.js
 export default class UpgradeModalScene extends Phaser.Scene {
     constructor() {
         super('UpgradeModalScene');
@@ -12,7 +11,6 @@ export default class UpgradeModalScene extends Phaser.Scene {
         this.scene.bringToTop();
         this.scene.setVisible(true);
 
-        // 카메라 뷰포트의 중앙 좌표 계산
         const camera = this.cameras.main;
         const centerX = camera.midPoint.x;
         const centerY = camera.midPoint.y;
@@ -50,16 +48,16 @@ export default class UpgradeModalScene extends Phaser.Scene {
                     color: '#ff0',
                 }).setOrigin(0.5).setScrollFactor(0).setDepth(1002);
 
+                this.gameScene.playerStats.applyUpgrade(upgrade.effect, upgrade.value);
+
                 this.time.delayedCall(2000, () => {
                     message.destroy();
                     buttons.forEach(b => b.destroy());
                     panel.destroy();
                     skipButton.destroy();
                     this.scene.stop();
-                    this.scene.resume('GameScene');
+                    this.scene.resume('GameScene'); // 🔥 핵심 수정
                 });
-
-                this.gameScene.playerStats.applyUpgrade(upgrade.effect, upgrade.value);
             });
 
             btn.on('pointerover', () => btn.setStyle({ color: '#ff0' }));
@@ -88,7 +86,7 @@ export default class UpgradeModalScene extends Phaser.Scene {
                 panel.destroy();
                 skipButton.destroy();
                 this.scene.stop();
-                this.scene.resume('GameScene');
+                this.scene.resume('GameScene'); // 🔥 핵심 수정
             });
         });
 
@@ -99,22 +97,30 @@ export default class UpgradeModalScene extends Phaser.Scene {
     }
 
     resizeUI(gameSize) {
+        if (!this.cameras || !this.cameras.main) return;
+
         const centerX = this.cameras.main.midPoint.x;
         const centerY = this.cameras.main.midPoint.y;
 
         this.children.list.forEach(child => {
+            if (!child || !child.setPosition) return;
+
             if (child instanceof Phaser.GameObjects.Rectangle) {
                 child.setPosition(centerX, centerY);
             } else if (child instanceof Phaser.GameObjects.Text) {
-                if (child.text === '업그레이드 선택') {
-                    child.setPosition(centerX, centerY - 150);
-                } else if (child.text === '무시') {
-                    child.setPosition(centerX, centerY + 120);
-                } else if (child.text.startsWith('선택됨:') || child.text === '업그레이드 무시됨') {
-                    child.setPosition(centerX, centerY + 180);
-                } else {
-                    const index = Math.floor((child.y - (centerY - 100)) / 60);
-                    child.setPosition(centerX, centerY - 100 + index * 60);
+                try {
+                    if (child.text === '업그레이드 선택') {
+                        child.setPosition(centerX, centerY - 150);
+                    } else if (child.text === '무시') {
+                        child.setPosition(centerX, centerY + 120);
+                    } else if (child.text.startsWith('선택됨:') || child.text === '업그레이드 무시됨') {
+                        child.setPosition(centerX, centerY + 180);
+                    } else {
+                        const index = Math.floor((child.y - (centerY - 100)) / 60);
+                        child.setPosition(centerX, centerY - 100 + index * 60);
+                    }
+                } catch (e) {
+                    console.warn('resizeUI error on text:', e);
                 }
             }
         });
