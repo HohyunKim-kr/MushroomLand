@@ -24,8 +24,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', '/games/MUSHROOMSURVIVOR/assets/player.png');
-        this.load.image('enemy', '/games/MUSHROOMSURVIVOR/assets/enemy.png');
+        this.load.image('player', '/games/MUSHROOMSURVIVOR/assets/player11.png');
+        this.load.image('enemy', '/games/MUSHROOMSURVIVOR/assets/spore.png');
         this.load.image('bullet', '/games/MUSHROOMSURVIVOR/assets/bullet.png');
         this.load.image('coin', '/games/MUSHROOMSURVIVOR/assets/coin.png');
         this.load.image('background', '/games/MUSHROOMSURVIVOR/assets/bgss.png');

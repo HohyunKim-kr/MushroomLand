@@ -4,7 +4,7 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', '/games/MUSHROOMSURVIVOR/assets/player.png');
+        this.load.image('player', '/games/MUSHROOMSURVIVOR/assets/player11.png');
     }
 
     create() {

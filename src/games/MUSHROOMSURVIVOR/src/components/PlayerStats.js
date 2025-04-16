@@ -19,11 +19,11 @@ export default class PlayerStats {
     applyUpgrade(effect, value) {
         console.log(`Applying upgrade: ${effect} with value ${value}`);
         if (effect === 'damage') {
-            this.stats.damage += value;
+            this.stats.damage = Math.min(this.stats.damage + value, 100); // 최대 데미지 100
         } else if (effect === 'speed') {
-            this.stats.speed += value;
+            this.stats.speed = Math.min(this.stats.speed + value, 600); // 최대 이동속도 600
         } else if (effect === 'health') {
-            this.stats.health += value;
+            this.stats.health = Math.min(this.stats.health + value, 10); // 최대 체력 10
             // 플레이어 체력 동기화
             if (this.scene.player) {
                 const currentHealth = this.scene.player.getData('health') || this.stats.health;
