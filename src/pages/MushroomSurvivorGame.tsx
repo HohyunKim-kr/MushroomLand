@@ -25,11 +25,12 @@ const MushroomSurvivorGame: React.FC = () => {
 
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        ...updateCanvasSize(),
         parent: gameRef.current,
         scale: {
-          mode: Phaser.Scale.RESIZE, // 동적 크기 조정을 위해 RESIZE 모드 사용
+          mode: Phaser.Scale.RESIZE,
           autoCenter: Phaser.Scale.CENTER_BOTH,
+          width: "100%", // 💡 생략 가능
+          height: "100%",
         },
         physics: {
           default: "arcade",
@@ -80,7 +81,7 @@ const MushroomSurvivorGame: React.FC = () => {
           ref={gameRef}
           style={{
             width: "100%",
-            height: "calc(100vh - 120px)", // 헤더와 푸터 고려
+            height: "calc(100vh - 120px)",
             maxHeight: "calc(100vh - 120px)",
             overflow: "hidden",
           }}

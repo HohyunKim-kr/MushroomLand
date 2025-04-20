@@ -13,10 +13,14 @@ export default class MenuScene extends Phaser.Scene {
 
     const graphics = this.add.graphics();
     graphics.fillGradientStyle(0x333333, 0x333333, 0x111111, 0x111111, 1);
-    this.background = graphics
-      .fillRect(0, 0, this.scale.width, this.scale.height)
-      .setScrollFactor(0)
-      .setDepth(0);
+    this.background = this.add.rectangle(
+      centerX,
+      centerY,
+      this.scale.width,
+      this.scale.height,
+      0x111111
+    );
+    this.background.setDepth(0);
 
     const fontSizeTitle = Math.min(this.scale.width / 20, 48);
     const fontSizeButton = Math.min(this.scale.width / 30, 32);
@@ -77,51 +81,40 @@ export default class MenuScene extends Phaser.Scene {
     });
 
     this.scale.on("resize", this.resizeUI, this);
+    this.resizeUI({ width: this.scale.width, height: this.scale.height }); // ✅ 초기 강제 호출
   }
 
   resizeUI(gameSize) {
     if (!this.cameras || !this.cameras.main) return;
 
-    const width = this.scale.width;
-    const height = this.scale.height;
+    const width = gameSize.width;
+    const height = gameSize.height;
+
     const centerX = width / 2;
     const centerY = height / 2;
 
-    const titleFontSize = Math.min(width * 0.05, 48);
-    const statsFontSize = Math.min(width * 0.03, 24);
-    const unlockFontSize = Math.min(width * 0.04, 32);
-    const buttonFontSize = Math.min(width * 0.03, 32);
+    const fontSizeTitle = Math.min(width / 20, 48);
+    const fontSizeButton = Math.min(width / 30, 32);
+    const fontSizeWeapons = Math.min(width / 40, 20);
 
-    try {
-      // ✅ null 체크 필수
-      if (this.background) {
-        this.background.setPosition(centerX, centerY);
-        if (typeof this.background.setSize === "function") {
-          this.background.setSize(width, height);
-        }
-      }
+    if (this.background) {
+      this.background.setPosition(centerX, centerY);
+      this.background.setSize(width, height); // 💥 중요
+    }
 
-      if (this.titleText) {
-        this.titleText.setPosition(centerX, height * 0.2);
-        this.titleText.setFontSize(titleFontSize);
-      }
+    if (this.titleText) {
+      this.titleText.setPosition(centerX, centerY - 200);
+      this.titleText.setFontSize(fontSizeTitle);
+    }
 
-      if (this.statsText) {
-        this.statsText.setPosition(centerX, height * 0.35);
-        this.statsText.setFontSize(statsFontSize);
-      }
+    if (this.startButton) {
+      this.startButton.setPosition(centerX, centerY);
+      this.startButton.setFontSize(fontSizeButton);
+    }
 
-      if (this.unlockText) {
-        this.unlockText.setPosition(centerX, height * 0.5);
-        this.unlockText.setFontSize(unlockFontSize);
-      }
-
-      if (this.restartButton) {
-        this.restartButton.setPosition(centerX, height * 0.65);
-        this.restartButton.setFontSize(buttonFontSize);
-      }
-    } catch (e) {
-      console.warn("UnlockScene resize error:", e);
+    if (this.weaponsText) {
+      this.weaponsText.setPosition(centerX, centerY + 100);
+      this.weaponsText.setFontSize(fontSizeWeapons);
     }
   }
 }

@@ -93,6 +93,7 @@ export default class GameScene extends Phaser.Scene {
     );
     this.player.setCollideWorldBounds(true);
     this.player.setDepth(1);
+    this.player.setScale(1.3);
     this.player.setData("health", this.playerStats.getStat("health"));
     this.player.setData("invincible", false);
 
