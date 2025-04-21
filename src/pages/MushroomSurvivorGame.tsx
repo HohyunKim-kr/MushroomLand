@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import NavBar from "@/components/NavBar";
-import GameScene from "../games/mushroomsurvivor/src/scenes/GameScene.js";
-import MenuScene from "../games/mushroomsurvivor/src/scenes/MenuScene.js";
-import UnlockScene from "../games/mushroomsurvivor/src/scenes/UnlockScene.js";
-import UnlockModalScene from "../games/mushroomsurvivor/src/scenes/UnlockModalScene.js";
-import UpgradeModalScene from "../games/mushroomsurvivor/src/scenes/UpgradeModalScene.js";
+import GameScene from "../games/mushroomsurvivor/scenes/GameScene.js";
+import MenuScene from "../games/mushroomsurvivor/scenes/MenuScene.js";
+import UnlockScene from "../games/mushroomsurvivor/scenes/UnlockScene.js";
+import UnlockModalScene from "../games/mushroomsurvivor/scenes/UnlockModalScene.js";
+import UpgradeModalScene from "../games/mushroomsurvivor/scenes/UpgradeModalScene.js";
 
 const MushroomSurvivorGame: React.FC = () => {
   const gameRef = useRef<HTMLDivElement>(null);
