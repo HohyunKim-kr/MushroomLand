@@ -42,31 +42,90 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
+
+    // 몬스터 사운드 로딩
+    this.load.audio('monsterAmbient', '/sfx/m_ambient.mp3');
+    this.load.audio('monsterDeath', '/sfx/m_death.mp3');
+
+
     this.load.image("player", "/games/MUSHROOMSURVIVOR/assets/player11.png");
     this.load.image("bullet", "/games/MUSHROOMSURVIVOR/assets/bullet.png");
     this.load.image("coin", "/games/MUSHROOMSURVIVOR/assets/coin.png");
-    this.load.image("background", "/games/MUSHROOMSURVIVOR/assets/bgss.png");
+    this.load.image("background", "/games/MUSHROOMSURVIVOR/assets/mushBG.png");
 
     // 몬스터 이미지 로딩
+
+    // spore
     this.load.image("spore", "/games/MUSHROOMSURVIVOR/assets/spore_M.png");
+
+    // orangeMushroom
     this.load.image(
       "orangeMushroom",
       "/games/MUSHROOMSURVIVOR/assets/orangeMushroom_M.png"
     );
+
+    // greenMushroom
     this.load.image(
       "greenMushroom",
       "/games/MUSHROOMSURVIVOR/assets/greenMushroom_M.png"
     );
+    
+    //cryBlueMushroom
     this.load.image(
       "cryBlueMushroom",
-      "/games/MUSHROOMSURVIVOR/assets/cryBlueMushroom_M.png"
+      "/games/MUSHROOMSURVIVOR/assets/cryBlueMushroom.png"
     );
-    this.load.image("mushMom", "/games/MUSHROOMSURVIVOR/assets/mushMom_M.png");
+
+    // mushMom
     this.load.image(
-      "blueMushMom",
+      "MushMom_M",
+      "/games/MUSHROOMSURVIVOR/assets/MushMom_M.png"
+    );
+
+    // blueMushMom
+    this.load.image(
+      "blueMushMom_M",
       "/games/MUSHROOMSURVIVOR/assets/blueMushMom_M.png"
     );
+
+    // godMush
     this.load.image("godMush", "/games/MUSHROOMSURVIVOR/assets/godMush_M.png");
+
+    // effects sprite 로딩
+    // this.load.spritesheet('monsterExplosion', '/games/MUSHROOMSURVIVOR/assets/dieEffect.png', {
+    //   frameWidth: 960 / 4,   // ← 전체 가로 / 4
+    //   frameHeight: 466 / 2,  // ← 전체 세로 / 2
+    // });
+
+    // 예시로 두 개 등록 (추가하면 더 작성)
+
+    // spore_explosion
+    this.load.spritesheet('spore_explosionSheet', '/games/MUSHROOMSURVIVOR/assets/orangeEffect_s.png', {
+      frameWidth: 240, frameHeight: 240
+    });
+
+    // orangeMushroom_explosion
+    this.load.spritesheet('orangeMushroom_explosionSheet', '/games/MUSHROOMSURVIVOR/assets/dieEffect.png', {
+      frameWidth: 240, frameHeight: 240
+    });
+
+    // greenMushroom_explosion
+    this.load.spritesheet('greenMushroom_explosionSheet', '/games/MUSHROOMSURVIVOR/assets/greenEffect_s.png', {
+      frameWidth: 166.5,
+      frameHeight: 187.5,
+    });
+
+    // blueMushMom_explosion
+    this.load.spritesheet('cryBlueMushroom_explosionSheet', '/games/MUSHROOMSURVIVOR/assets/blueEffect_s.png', {
+      frameWidth: 166.5,
+      frameHeight: 187.5,
+    });
+    
+    this.load.spritesheet('godMush_explosionSheet', '/games/MUSHROOMSURVIVOR/assets/redEffect_s.png', {
+      frameWidth: 166.5,
+      frameHeight: 187.5,
+    });
+    
   }
 
   create() {
@@ -85,6 +144,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
     this.addBackground(worldWidth, worldHeight);
+
 
     this.player = this.physics.add.sprite(
       worldWidth / 2,
@@ -146,16 +206,74 @@ export default class GameScene extends Phaser.Scene {
       callbackScope: this,
       loop: true,
     });
-    this.time.addEvent({
-      delay: 1000,
-      callback: () => {
-        this.gameTime++;
-        if (this.gameTime >= 180) this.gameOver(true);
-      },
-      callbackScope: this,
-      loop: true,
+    // this.anims.create({
+    //   key: 'monsterExplode',
+    //   frames: this.anims.generateFrameNumbers('monsterExplosion', { start: 0, end: 15 }),
+    //   frameRate: 20,
+    //   hideOnComplete: true,
+    // });
+    this.input.keyboard.on('keydown-L', (event) => {
+      if (event.shiftKey) {
+        this.level = 10;
+        this.exp = 0;
+        this.updateUI();
+        console.log('🚀 치트 발동! 레벨 10으로 설정됨');
+      }
     });
 
+    this.anims.create({
+      key: 'spore_explosion',
+      frames: this.anims.generateFrameNumbers('spore_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });
+    this.anims.create({
+      key: 'orangeMushroom_explosion',
+      frames: this.anims.generateFrameNumbers('orangeMushroom_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });
+    this.anims.create({
+      key: 'MushMom_M_explosion',
+      frames: this.anims.generateFrameNumbers('orangeMushroom_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });
+    this.anims.create({
+      key: 'greenMushroom_explosion',
+      frames: this.anims.generateFrameNumbers('greenMushroom_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });
+    this.anims.create({
+      key: 'cryBlueMushroom_explosion',
+      frames: this.anims.generateFrameNumbers('cryBlueMushroom_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });    
+    this.anims.create({
+      key: 'blueMushMom_M_explosion',
+      frames: this.anims.generateFrameNumbers('cryBlueMushroom_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });    
+    this.anims.create({
+      key: 'godMush_explosion',
+      frames: this.anims.generateFrameNumbers('godMush_explosionSheet', { start: 0, end: 7 }),
+      frameRate: 10,
+      hideOnComplete: true,
+    });
+    // this.time.addEvent({
+    //   delay: 1000,
+    //   callback: () => {
+    //     this.gameTime++;
+    //     if (this.gameTime >= 180) this.gameOver(true);
+    //   },
+    //   callbackScope: this,
+    //   loop: true,
+    // });
+
+    
     this.createUI();
     this.scale.on("resize", this.handleResize, this);
   }
@@ -325,7 +443,7 @@ export default class GameScene extends Phaser.Scene {
         this.enemies.add(boss);
         this[`bossSpawned_${level}`] = true;
       }
-      return;
+      // return;
     }
 
     // 일반 몬스터 랜덤 선택
@@ -333,6 +451,19 @@ export default class GameScene extends Phaser.Scene {
     const MonsterClass = Phaser.Utils.Array.GetRandom(availableClasses);
     const enemy = new MonsterClass(this, x, y);
     this.enemies.add(enemy);
+
+    enemy.once("killed", (deadEnemy) => {
+      this.enemiesKilled++;
+      this.exp += 20;
+      this.updateUI();
+      this.spawnCoin(deadEnemy.x, deadEnemy.y);
+      if (this.exp >= this.level * 100) {
+        this.levelUp();
+      }
+      if (deadEnemy.texture.key === "godMush") {
+        this.time.delayedCall(1000, () => this.gameOver(true));
+      }
+    });
   }
 
   getAvailableMonstersForLevel(level) {
@@ -378,19 +509,16 @@ export default class GameScene extends Phaser.Scene {
 
   bulletHitEnemy(bullet, enemy) {
     bullet.destroy();
-    let damage = bullet.getData("damage") || 1;
-    let health = enemy.getData("health") - damage;
-    enemy.setData("health", health);
-    if (health <= 0) {
-      enemy.destroy();
-      this.enemiesKilled++;
-      this.exp += 20;
-      this.updateUI();
-      this.spawnCoin(enemy.x, enemy.y);
-      if (this.exp >= this.level * 100) {
-        this.levelUp();
-      }
+  
+    const damage = bullet.getData("damage") || 1;
+  
+    // 몬스터가 자체적으로 죽음 판단 및 애니메이션 실행
+    if (enemy.takeDamage) {
+      enemy.takeDamage(damage);
     }
+  
+    // 더 이상 직접 destroy() 하지 않음
+    // 죽었을 경우엔 BaseMonster 내 playDeathEffect()에서 emit("killed") 처리됨
   }
 
   collectCoin(player, coin) {

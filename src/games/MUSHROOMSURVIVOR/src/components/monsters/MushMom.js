@@ -3,9 +3,9 @@ import BaseMonster from "./BaseMonster.js";
 
 export default class MushMom extends BaseMonster {
   constructor(scene, x, y) {
-    super(scene, x, y, "mushMom"); // preload에 등록된 이미지 키
+    super(scene, x, y, "MushMom_M"); // preload에 등록된 이미지 키
     this.initAttributes({
-      health: 50, // 강력한 체력
+      health: 1, // 강력한 체력
       speed: 70, // 보스라서 느리게
       damage: 5, // 꽤 강한 데미지
     });
