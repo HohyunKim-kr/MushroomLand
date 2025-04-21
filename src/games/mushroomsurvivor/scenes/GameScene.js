@@ -42,54 +42,52 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-
     // 몬스터 사운드 로딩
-    this.load.audio('monsterAmbient', '/sfx/m_ambient.mp3');
-    this.load.audio('monsterDeath', '/sfx/m_death.mp3');
+    this.load.audio("monsterAmbient", "/sfx/m_ambient.mp3");
+    this.load.audio("monsterDeath", "/sfx/m_death.mp3");
 
-
-    this.load.image("player", "/games/mushroomsurvivor/assets/player11.png");
-    this.load.image("bullet", "/games/mushroomsurvivor/assets/bullet.png");
-    this.load.image("coin", "/games/mushroomsurvivor/assets/coin.png");
-    this.load.image("background", "/games/mushroomsurvivor/assets/mushBG.png");
+    this.load.image("player", "/games/MUSHROOMSURVIVOR/assets/player11.png");
+    this.load.image("bullet", "/games/MUSHROOMSURVIVOR/assets/bullet.png");
+    this.load.image("coin", "/games/MUSHROOMSURVIVOR/assets/coin.png");
+    this.load.image("background", "/games/MUSHROOMSURVIVOR/assets/mushBG.png");
 
     // 몬스터 이미지 로딩
 
     // spore
-    this.load.image("spore", "/games/mushroomsurvivor/assets/spore_M.png");
+    this.load.image("spore", "/games/MUSHROOMSURVIVOR/assets/spore_M.png");
 
     // orangeMushroom
     this.load.image(
       "orangeMushroom",
-      "/games/mushroomsurvivor/assets/orangeMushroom_M.png"
+      "/games/MUSHROOMSURVIVOR/assets/orangeMushroom_M.png"
     );
 
     // greenMushroom
     this.load.image(
       "greenMushroom",
-      "/games/mushroomsurvivor/assets/greenMushroom_M.png"
+      "/games/MUSHROOMSURVIVOR/assets/greenMushroom_M.png"
     );
-    
+
     //cryBlueMushroom
     this.load.image(
       "cryBlueMushroom",
-      "/games/mushroomsurvivor/assets/cryBlueMushroom.png"
+      "/games/MUSHROOMSURVIVOR/assets/cryBlueMushroom.png"
     );
 
     // mushMom
     this.load.image(
       "MushMom_M",
-      "/games/mushroomsurvivor/assets/MushMom_M.png"
+      "/games/MUSHROOMSURVIVOR/assets/MushMom_M.png"
     );
 
     // blueMushMom
     this.load.image(
       "blueMushMom_M",
-      "/games/mushroomsurvivor/assets/blueMushMom_M.png"
+      "/games/MUSHROOMSURVIVOR/assets/blueMushMom_M.png"
     );
 
     // godMush
-    this.load.image("godMush", "/games/mushroomsurvivor/assets/godMush_M.png");
+    this.load.image("godMush", "/games/MUSHROOMSURVIVOR/assets/godMush_M.png");
 
     // effects sprite 로딩
     // this.load.spritesheet('monsterExplosion', '/games/MUSHROOMSURVIVOR/assets/dieEffect.png', {
@@ -100,32 +98,53 @@ export default class GameScene extends Phaser.Scene {
     // 예시로 두 개 등록 (추가하면 더 작성)
 
     // spore_explosion
-    this.load.spritesheet('spore_explosionSheet', '/games/mushroomsurvivor/assets/orangeEffect_s.png', {
-      frameWidth: 240, frameHeight: 240
-    });
+    this.load.spritesheet(
+      "spore_explosionSheet",
+      "/games/MUSHROOMSURVIVOR/assets/orangeEffect_s.png",
+      {
+        frameWidth: 240,
+        frameHeight: 240,
+      }
+    );
 
     // orangeMushroom_explosion
-    this.load.spritesheet('orangeMushroom_explosionSheet', '/games/mushroomsurvivor/assets/dieEffect.png', {
-      frameWidth: 240, frameHeight: 240
-    });
+    this.load.spritesheet(
+      "orangeMushroom_explosionSheet",
+      "/games/MUSHROOMSURVIVOR/assets/dieEffect.png",
+      {
+        frameWidth: 240,
+        frameHeight: 240,
+      }
+    );
 
     // greenMushroom_explosion
-    this.load.spritesheet('greenMushroom_explosionSheet', '/games/mushroomsurvivor/assets/greenEffect_s.png', {
-      frameWidth: 166.5,
-      frameHeight: 187.5,
-    });
+    this.load.spritesheet(
+      "greenMushroom_explosionSheet",
+      "/games/MUSHROOMSURVIVOR/assets/greenEffect_s.png",
+      {
+        frameWidth: 166.5,
+        frameHeight: 187.5,
+      }
+    );
 
     // blueMushMom_explosion
-    this.load.spritesheet('cryBlueMushroom_explosionSheet', '/games/mushroomsurvivor/assets/blueEffect_s.png', {
-      frameWidth: 166.5,
-      frameHeight: 187.5,
-    });
-    
-    this.load.spritesheet('godMush_explosionSheet', '/games/mushroomsurvivor/assets/redEffect_s.png', {
-      frameWidth: 166.5,
-      frameHeight: 187.5,
-    });
-    
+    this.load.spritesheet(
+      "cryBlueMushroom_explosionSheet",
+      "/games/MUSHROOMSURVIVOR/assets/blueEffect_s.png",
+      {
+        frameWidth: 166.5,
+        frameHeight: 187.5,
+      }
+    );
+
+    this.load.spritesheet(
+      "godMush_explosionSheet",
+      "/games/MUSHROOMSURVIVOR/assets/redEffect_s.png",
+      {
+        frameWidth: 166.5,
+        frameHeight: 187.5,
+      }
+    );
   }
 
   create() {
@@ -144,7 +163,6 @@ export default class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
     this.addBackground(worldWidth, worldHeight);
-
 
     this.player = this.physics.add.sprite(
       worldWidth / 2,
@@ -212,54 +230,75 @@ export default class GameScene extends Phaser.Scene {
     //   frameRate: 20,
     //   hideOnComplete: true,
     // });
-    this.input.keyboard.on('keydown-L', (event) => {
+    this.input.keyboard.on("keydown-L", (event) => {
       if (event.shiftKey) {
         this.level = 10;
         this.exp = 0;
         this.updateUI();
-        console.log('🚀 치트 발동! 레벨 10으로 설정됨');
+        console.log("🚀 치트 발동! 레벨 10으로 설정됨");
       }
     });
 
     this.anims.create({
-      key: 'spore_explosion',
-      frames: this.anims.generateFrameNumbers('spore_explosionSheet', { start: 0, end: 7 }),
+      key: "spore_explosion",
+      frames: this.anims.generateFrameNumbers("spore_explosionSheet", {
+        start: 0,
+        end: 7,
+      }),
       frameRate: 10,
       hideOnComplete: true,
     });
     this.anims.create({
-      key: 'orangeMushroom_explosion',
-      frames: this.anims.generateFrameNumbers('orangeMushroom_explosionSheet', { start: 0, end: 7 }),
+      key: "orangeMushroom_explosion",
+      frames: this.anims.generateFrameNumbers("orangeMushroom_explosionSheet", {
+        start: 0,
+        end: 7,
+      }),
       frameRate: 10,
       hideOnComplete: true,
     });
     this.anims.create({
-      key: 'MushMom_M_explosion',
-      frames: this.anims.generateFrameNumbers('orangeMushroom_explosionSheet', { start: 0, end: 7 }),
+      key: "MushMom_M_explosion",
+      frames: this.anims.generateFrameNumbers("orangeMushroom_explosionSheet", {
+        start: 0,
+        end: 7,
+      }),
       frameRate: 10,
       hideOnComplete: true,
     });
     this.anims.create({
-      key: 'greenMushroom_explosion',
-      frames: this.anims.generateFrameNumbers('greenMushroom_explosionSheet', { start: 0, end: 7 }),
+      key: "greenMushroom_explosion",
+      frames: this.anims.generateFrameNumbers("greenMushroom_explosionSheet", {
+        start: 0,
+        end: 7,
+      }),
       frameRate: 10,
       hideOnComplete: true,
     });
     this.anims.create({
-      key: 'cryBlueMushroom_explosion',
-      frames: this.anims.generateFrameNumbers('cryBlueMushroom_explosionSheet', { start: 0, end: 7 }),
+      key: "cryBlueMushroom_explosion",
+      frames: this.anims.generateFrameNumbers(
+        "cryBlueMushroom_explosionSheet",
+        { start: 0, end: 7 }
+      ),
       frameRate: 10,
       hideOnComplete: true,
-    });    
+    });
     this.anims.create({
-      key: 'blueMushMom_M_explosion',
-      frames: this.anims.generateFrameNumbers('cryBlueMushroom_explosionSheet', { start: 0, end: 7 }),
+      key: "blueMushMom_M_explosion",
+      frames: this.anims.generateFrameNumbers(
+        "cryBlueMushroom_explosionSheet",
+        { start: 0, end: 7 }
+      ),
       frameRate: 10,
       hideOnComplete: true,
-    });    
+    });
     this.anims.create({
-      key: 'godMush_explosion',
-      frames: this.anims.generateFrameNumbers('godMush_explosionSheet', { start: 0, end: 7 }),
+      key: "godMush_explosion",
+      frames: this.anims.generateFrameNumbers("godMush_explosionSheet", {
+        start: 0,
+        end: 7,
+      }),
       frameRate: 10,
       hideOnComplete: true,
     });
@@ -273,7 +312,6 @@ export default class GameScene extends Phaser.Scene {
     //   loop: true,
     // });
 
-    
     this.createUI();
     this.scale.on("resize", this.handleResize, this);
   }
@@ -351,13 +389,13 @@ export default class GameScene extends Phaser.Scene {
 
   handleResize(gameSize) {
     if (!gameSize || !this.scene.isActive()) return;
-  
+
     const width = gameSize.width;
     const height = gameSize.height;
-  
+
     // ✅ 월드는 처음 설정한 크기 유지 (변경 ❌)
     // this.physics.world.setBounds(...) 호출 생략 또는 고정값 사용
-  
+
     // ✅ 카메라 바운드는 월드 기준으로 그대로 유지
     this.cameras.main.setBounds(
       0,
@@ -365,15 +403,15 @@ export default class GameScene extends Phaser.Scene {
       this.physics.world.bounds.width,
       this.physics.world.bounds.height
     );
-  
+
     // ✅ 카메라도 플레이어 계속 따라가게
     if (this.player) {
       this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     }
-  
+
     // ✅ 배경 사이즈 조정
     this.adjustBackgroundSize();
-  
+
     // ✅ UI 고정 위치 재조정
     const m = 10;
     this.expText?.setPosition(m, m);
@@ -385,7 +423,6 @@ export default class GameScene extends Phaser.Scene {
     this.weaponText?.setPosition(m, m + 180);
     this.cooldownText?.setPosition(m, m + 210);
   }
-  
 
   update() {
     let speed = this.playerStats.getStat("speed");
@@ -523,14 +560,14 @@ export default class GameScene extends Phaser.Scene {
 
   bulletHitEnemy(bullet, enemy) {
     bullet.destroy();
-  
+
     const damage = bullet.getData("damage") || 1;
-  
+
     // 몬스터가 자체적으로 죽음 판단 및 애니메이션 실행
     if (enemy.takeDamage) {
       enemy.takeDamage(damage);
     }
-  
+
     // 더 이상 직접 destroy() 하지 않음
     // 죽었을 경우엔 BaseMonster 내 playDeathEffect()에서 emit("killed") 처리됨
   }
