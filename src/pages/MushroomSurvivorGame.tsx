@@ -20,17 +20,17 @@ const MushroomSurvivorGame: React.FC = () => {
             height: gameRef.current.clientHeight,
           };
         }
-        return { width: window.innerWidth, height: window.innerHeight - 120 };
+        return { width: window.innerWidth, height: window.innerHeight - 60 }; // NavBar 높이 고려
       };
 
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         parent: gameRef.current,
         scale: {
-          mode: Phaser.Scale.RESIZE,
-          autoCenter: Phaser.Scale.CENTER_BOTH,
-          width: "100%", // 💡 생략 가능
-          height: "100%",
+          mode: Phaser.Scale.RESIZE, // 창 크기에 맞춰 리사이즈
+          autoCenter: Phaser.Scale.CENTER_BOTH, // 캔버스 중앙 정렬
+          width: updateCanvasSize().width, // 초기 너비
+          height: updateCanvasSize().height, // 초기 높이
         },
         physics: {
           default: "arcade",
@@ -53,14 +53,20 @@ const MushroomSurvivorGame: React.FC = () => {
       const handleResize = () => {
         if (gameInstance.current && gameRef.current) {
           const { width, height } = updateCanvasSize();
+          // Phaser 캔버스 크기 조정
           gameInstance.current.scale.resize(width, height);
-          // 모든 씬에 크기 조정 이벤트 전파 (안전하게 처리)
+          // 부모 컨테이너 크기와 동기화
+          gameRef.current.style.width = `${width}px`;
+          gameRef.current.style.height = `${height}px`;
+          // 모든 씬에 크기 조정 이벤트 전파
           gameInstance.current.scene.scenes.forEach((scene) => {
             scene.scale?.emit?.("resize", { width, height });
           });
         }
       };
 
+      // 초기 크기 설정
+      handleResize();
       window.addEventListener("resize", handleResize);
 
       return () => {
@@ -76,13 +82,13 @@ const MushroomSurvivorGame: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-mp-background bg-cover bg-center bg-no-repeat bg-blend-overlay bg-gradient-to-b from-[#1A0B2E]/90 to-[#2A1A3E]/90">
       <NavBar />
-      <div className="flex-1 container mx-auto pt-24 px-4">
+      <div className="flex-1">
         <div
           ref={gameRef}
           style={{
             width: "100%",
-            height: "calc(100vh - 120px)",
-            maxHeight: "calc(100vh - 120px)",
+            height: "calc(100vh - 60px)", // NavBar 높이 고려
+            maxHeight: "calc(100vh - 60px)",
             overflow: "hidden",
           }}
         />

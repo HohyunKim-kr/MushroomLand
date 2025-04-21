@@ -8,7 +8,6 @@ const NavBar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      // 백엔드로 로그아웃 요청 보내기 (fetch 사용)
       const response = await fetch('http://localhost:5000/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -17,14 +16,9 @@ const NavBar: React.FC = () => {
       });
 
       if (response.ok) {
-        // 상태 초기화 (JWT 토큰과 사용자 정보 초기화)
         setJwtToken('');
         setUser(null);
-
-        // localStorage에서 JWT 토큰 삭제
         localStorage.removeItem('jwtToken');
-
-        // 로그아웃 후 로그인 페이지로 리디렉션
         navigate('/login');
       } else {
         throw new Error('Logout failed');
@@ -40,25 +34,48 @@ const NavBar: React.FC = () => {
         <div className="text-white text-2xl font-bold">
           <span>Community MushroomLand</span>
         </div>
-        <div className="text-white">
-          {user ? (
-            <div className="flex items-center gap-4">
-              <span>{user.email}</span>
+        <div className="flex items-center gap-4">
+          {/* Navigation Links */}
+          <button
+            onClick={() => navigate('/bulletin')}
+            className="text-white px-4 py-2 rounded-md hover:bg-[#FF66B3]/50"
+          >
+            Bulletin
+          </button>
+          <button
+            onClick={() => navigate('/dressroom')}
+            className="text-white px-4 py-2 rounded-md hover:bg-[#FF66B3]/50"
+          >
+            Dressroom
+          </button>
+          <button
+            onClick={() => navigate('/game')} // or '/mushroomsurvivalgame' depending on which game you prefer
+            className="text-white px-4 py-2 rounded-md hover:bg-[#FF66B3]/50"
+          >
+            Game
+          </button>
+
+          {/* User Authentication Section */}
+          <div className="text-white">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span>{user.email}</span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
+                >
+                  로그아웃
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={handleLogout}
+                onClick={() => navigate('/login')}
                 className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
               >
-                로그아웃
+                로그인
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => navigate('/login')}
-              className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
-            >
-              로그인
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

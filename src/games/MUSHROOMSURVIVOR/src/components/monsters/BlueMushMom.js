@@ -10,5 +10,5 @@ export default class BlueMushMom extends BaseMonster {
       damage: 7, // 더 강한 데미지
     });
     this.setScale(1.7); // 더 크게 (보스 시각 강조)
-  }
+  }  
 }

@@ -350,18 +350,31 @@ export default class GameScene extends Phaser.Scene {
   }
 
   handleResize(gameSize) {
-    if (!gameSize || !this.scene.isActive()) return; // ✅ 씬이 활성 상태일 때만 실행
-
+    if (!gameSize || !this.scene.isActive()) return;
+  
     const width = gameSize.width;
     const height = gameSize.height;
-    const worldWidth = width * 2;
-    const worldHeight = height * 2;
-
-    this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
-    this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
-
+  
+    // ✅ 월드는 처음 설정한 크기 유지 (변경 ❌)
+    // this.physics.world.setBounds(...) 호출 생략 또는 고정값 사용
+  
+    // ✅ 카메라 바운드는 월드 기준으로 그대로 유지
+    this.cameras.main.setBounds(
+      0,
+      0,
+      this.physics.world.bounds.width,
+      this.physics.world.bounds.height
+    );
+  
+    // ✅ 카메라도 플레이어 계속 따라가게
+    if (this.player) {
+      this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
+    }
+  
+    // ✅ 배경 사이즈 조정
     this.adjustBackgroundSize();
-
+  
+    // ✅ UI 고정 위치 재조정
     const m = 10;
     this.expText?.setPosition(m, m);
     this.levelText?.setPosition(m, m + 30);
@@ -372,6 +385,7 @@ export default class GameScene extends Phaser.Scene {
     this.weaponText?.setPosition(m, m + 180);
     this.cooldownText?.setPosition(m, m + 210);
   }
+  
 
   update() {
     let speed = this.playerStats.getStat("speed");
