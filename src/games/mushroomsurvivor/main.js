@@ -1,6 +1,6 @@
 // src/main.js
 import Phaser from 'phaser';
-import GameScene from './scenes/GameScene.js';
+import GameScene from './scenes/GameScene1.js';
 import MenuScene from './scenes/MenuScene.js';
 import UnlockScene from './scenes/UnlockScene.js';
 import UnlockModalScene from './scenes/UnlockModalScene.js';
