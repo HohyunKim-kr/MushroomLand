@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import NavBar from "@/components/NavBar";
-import GameScene from "../games/mushroomsurvivor/scenes/GameScene1.js";
+import GameScene from "../games/mushroomsurvivor/scenes/GameScene.js";  
 import MenuScene from "../games/mushroomsurvivor/scenes/MenuScene.js";
 import UnlockScene from "../games/mushroomsurvivor/scenes/UnlockScene.js";
 import UnlockModalScene from "../games/mushroomsurvivor/scenes/UnlockModalScene.js";
