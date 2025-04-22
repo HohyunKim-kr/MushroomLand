@@ -59,6 +59,29 @@ mushroom-survivor/
 
 ## 🔥 핵심 기능
 
+
+### 플로우 
+```mermaid
+flowchart TD
+  MenuScene["🟢 MenuScene<br>게임 시작 전 메뉴"]
+  GameScene["🎮 GameScene<br>플레이어 조작, 전투"]
+  UpgradeModalScene["📈 UpgradeModalScene<br>업그레이드 선택"]
+  UnlockModalScene["🚀 UnlockModalScene<br>무기 해금 모달"]
+  UnlockScene["🔚 UnlockScene<br>게임 종료 결과"]
+
+  MenuScene -->|Start Game| GameScene
+
+  GameScene -->|코인 수집 시| UpgradeModalScene
+  GameScene -->|무기 해금 조건 달성 시| UnlockModalScene
+
+  UpgradeModalScene -->|선택 완료| GameScene
+  UnlockModalScene -->|확인| GameScene
+
+  GameScene -->|180초 생존 or 체력 0| UnlockScene
+  UnlockScene -->|Back to Menu| MenuScene
+```
+
+
 ### 🚀 플레이어 컨트롤
 - `WASD`로 이동
 - 마우스 방향 조준 및 자동 사격
