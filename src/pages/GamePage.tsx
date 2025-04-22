@@ -23,7 +23,7 @@ const GamePage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [loading, setLoading] = useState(true);
 
-  const categories = ['전체', '액션', '슈팅', '아케이드', '스포츠', '퍼즐보드', '전략/시뮬', '기타'];
+  const categories = ['all', 'action', 'shooting', 'arcade', 'sports', 'puzzle', 'Strategy/Simulation', 'etc'];
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -32,40 +32,40 @@ const GamePage: React.FC = () => {
         const mockGames: Game[] = [
           {
             id: '1',
-            title: '메이플 인내의 숲 점프 게임',
-            category: '아케이드',
+            title: 'Maple patient jump',
+            category: 'arcade',
             thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=JumpGame',
-            description: '메이플 인내의 숲 스타일 무한 점프 게임!',
+            description: 'maple patient jump game!',
             good: 150,
             bad: 20,
             url: './JumpGame',
           },
           {
             id: '2',
-            title: '미니어쳐',
-            category: '액션',
+            title: 'mimiature',
+            category: 'action',
             thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=Miniature',
-            description: '미니어쳐 캐릭터와 함께하는 액션 게임!',
+            description: 'mimiature action!',
             good: 120,
             bad: 30,
             url: '/games/miniature',
           },
           {
             id: '3',
-            title: '바닐라 드릴6',
-            category: '퍼즐보드',
+            title: 'banilla drill 6',
+            category: 'puzzle board',
             thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=VanillaDrill',
-            description: '퍼즐을 풀며 드릴을 완성하세요.',
+            description: 'puzzle drill',
             good: 85,
             bad: 15,
             url: '/games/vanilladrill',
           },
           {
             id: '4',
-            title: '스페이스',
-            category: '슈팅',
+            title: 'space Adventure',
+            category: 'shooting',
             thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=Space',
-            description: '우주를 배경으로 한 슈팅 게임!',
+            description: 'space Adventure!',
             good: 200,
             bad: 50,
             url: '/games/space',
@@ -73,9 +73,9 @@ const GamePage: React.FC = () => {
           {
             id: '5',
             title: 'Mushroom Survivor',
-            category: '슈팅',
+            category: 'shooting',
             thumbnail: 'https://placehold.co/200x150/2A1A3E/66E6CC?text=MushroomSurvivor',
-            description: '버섯 캐릭터와 함께하는 생존 슈팅 게임!',
+            description: 'Mushroom survivors!',
             good: 180,
             bad: 25,
             url: '/mushroomsurvivor', // MushroomSurvivorGame.tsx 경로

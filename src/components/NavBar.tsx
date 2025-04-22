@@ -64,7 +64,7 @@ const NavBar: React.FC = () => {
                   onClick={handleLogout}
                   className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
                 >
-                  로그아웃
+                  logout
                 </button>
               </div>
             ) : (
@@ -72,7 +72,7 @@ const NavBar: React.FC = () => {
                 onClick={() => navigate('/login')}
                 className="bg-[#FF66B3] text-white px-4 py-2 rounded-md"
               >
-                로그인
+                login
               </button>
             )}
           </div>

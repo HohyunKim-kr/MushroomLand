@@ -82,7 +82,7 @@ export default class UpgradeModalScene extends Phaser.Scene {
         skipButton.setAlpha(0.5);
 
         const message = this.add
-          .text(centerX, centerY + 180, `선택됨: ${upgrade.name}`, {
+          .text(centerX, centerY + 180, `selected: ${upgrade.name}`, {
             fontSize: "24px",
             color: "#ff0",
           })
@@ -93,7 +93,7 @@ export default class UpgradeModalScene extends Phaser.Scene {
 
         this.gameScene.playerStats.applyUpgrade(upgrade.effect, upgrade.value);
 
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(1000, () => {
           message.destroy();
           buttons.forEach((b) => b.destroy());
           panel.destroy();
