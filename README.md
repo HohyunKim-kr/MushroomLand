@@ -5,7 +5,7 @@ Phaser + JavaScript 기반으로 구현된 탑다운 슈터이며, 무기 해금
 
 ## 🎮 데모
 
-👉 [게임 플레이하기](https://mushroom-land.vercel.app/mushroomsurvivor)  
+👉 [게임 플레이하기](https://mushroom-land.vercel.app)  
 📝 [기획 문서 (Notion)](https://rainbow-appeal-099.notion.site/MushRoomLand-1d228f551d978053ace3c011d3d24200?pvs=4)
 
 ## 🗓 작업 기간
